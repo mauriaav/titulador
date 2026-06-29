@@ -1,0 +1,69 @@
+✅ 20 títulos cargados desde 'titulos.csv'
+⌨️  Hotkey registrado: CTRL+SHIFT+SPACE
+🟢 ClipTítulos corriendo en el system tray. Presioná el atajo para buscar.
+
+📋 Copiado: Bloqueo de Tarjeta
+
+🔴 ClipTítulos cerrado.
+Traceback (most recent call last):
+  File "main.py", line 72, in <module>
+    main()
+    ~~~~^^
+  File "main.py", line 64, in main
+    app = ClipTitulosApp(
+        ruta_csv=ruta_csv,
+        hotkey="ctrl+shift+space",
+    )
+  File "src\app.py", line 44, in __init__
+    self._manager = TituloManager(self.ruta_csv)
+                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "src\titulo_manager.py", line 37, in __init__
+    self.cargar()
+    ~~~~~~~~~~~^^
+  File "src\titulo_manager.py", line 54, in cargar
+    self._cargar_csv()
+    ~~~~~~~~~~~~~~~~^^
+  File "src\titulo_manager.py", line 61, in _cargar_csv
+    if "titulo" not in (reader.fieldnames or []):
+                        ^^^^^^^^^^^^^^^^^
+  File "csv.py", line 163, in fieldnames
+  File "<frozen codecs>", line 325, in decode
+  File "encodings\utf_8_sig.py", line 69, in _buffer_decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 479: invalid continuation byte
+✅ 20 títulos cargados desde 'titulos.csv'
+⌨️  Hotkey registrado: CTRL+SHIFT+SPACE
+🟢 ClipTítulos corriendo en el system tray. Presioná el atajo para buscar.
+
+
+🔴 ClipTítulos cerrado.
+Traceback (most recent call last):
+  File "main.py", line 72, in <module>
+    main()
+    ~~~~^^
+  File "main.py", line 64, in main
+    app = ClipTitulosApp(
+        ruta_csv=ruta_csv,
+        hotkey="ctrl+shift+space",
+    )
+  File "src\app.py", line 44, in __init__
+    self._manager = TituloManager(self.ruta_csv)
+                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "src\titulo_manager.py", line 37, in __init__
+    self.cargar()
+    ~~~~~~~~~~~^^
+  File "src\titulo_manager.py", line 54, in cargar
+    self._cargar_csv()
+    ~~~~~~~~~~~~~~~~^^
+  File "src\titulo_manager.py", line 61, in _cargar_csv
+    if "titulo" not in (reader.fieldnames or []):
+                        ^^^^^^^^^^^^^^^^^
+  File "csv.py", line 163, in fieldnames
+  File "<frozen codecs>", line 325, in decode
+  File "encodings\utf_8_sig.py", line 69, in _buffer_decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 479: invalid continuation byte
+✅ 21 títulos cargados desde 'titulos.csv'
+⌨️  Hotkey registrado: CTRL+SHIFT+SPACE
+🟢 ClipTítulos corriendo en el system tray. Presioná el atajo para buscar.
+
+
+🔴 ClipTítulos cerrado.
