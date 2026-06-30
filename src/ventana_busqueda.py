@@ -7,7 +7,7 @@ Responsabilidad: UI de búsqueda y selección de títulos.
 import tkinter as tk
 from tkinter import font as tkfont
 
-from .titulo_manager import TituloManager
+from .titulo_manager import TituloManager, Titulo
 
 
 # Paleta de colores
@@ -51,6 +51,7 @@ class VentanaBusqueda(tk.Toplevel):
         self._manager = manager
         self._on_seleccion = on_seleccion
         self._indice_hover = -1
+        self._resultados_actuales: list[Titulo] = []  # paralela a la Listbox
 
         self._configurar_ventana()
         self._construir_ui()
@@ -175,9 +176,11 @@ class VentanaBusqueda(tk.Toplevel):
 
     def _actualizar_lista(self, query: str) -> None:
         resultados = self._manager.buscar(query)
+        self._resultados_actuales = resultados
+
         self._listbox.delete(0, "end")
-        for titulo in resultados:
-            self._listbox.insert("end", f"  {titulo}")
+        for entrada in resultados:
+            self._listbox.insert("end", f"  {entrada.titulo}")
 
         total = len(resultados)
         self._lbl_contador.config(
@@ -219,21 +222,23 @@ class VentanaBusqueda(tk.Toplevel):
     def _seleccionar_click(self, _=None) -> None:
         sel = self._listbox.curselection()
         if sel:
-            self._copiar_y_cerrar(self._listbox.get(sel[0]).strip())
+            entrada = self._resultados_actuales[sel[0]]
+            self._copiar_y_cerrar(entrada)
 
     def _seleccionar_actual(self, _=None) -> None:
         sel = self._listbox.curselection()
         if sel:
-            self._copiar_y_cerrar(self._listbox.get(sel[0]).strip())
+            entrada = self._resultados_actuales[sel[0]]
+            self._copiar_y_cerrar(entrada)
 
-    def _copiar_y_cerrar(self, titulo: str) -> None:
-        """Copia el título al portapapeles y cierra la ventana."""
+    def _copiar_y_cerrar(self, entrada: Titulo) -> None:
+        """Copia el cuerpo de la entrada al portapapeles y cierra la ventana."""
         self.clipboard_clear()
-        self.clipboard_append(titulo)
+        self.clipboard_append(entrada.cuerpo)
         self.update()  # Necesario para que Tkinter confirme el clipboard
 
         if self._on_seleccion:
-            self._on_seleccion(titulo)
+            self._on_seleccion(entrada.titulo)
 
         self.destroy()
 

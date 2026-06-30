@@ -6,6 +6,7 @@ Responsabilidad: cargar títulos desde CSV/Excel y proveer búsqueda.
 
 import csv
 import unicodedata
+from dataclasses import dataclass
 from pathlib import Path
 
 
@@ -17,6 +18,23 @@ def normalizar(texto: str) -> str:
     return texto
 
 
+@dataclass
+class Titulo:
+    """
+    Representa una entrada del CSV/Excel.
+
+    Atributos
+    ---------
+    titulo : str
+        Texto corto que se muestra y se usa para buscar.
+    cuerpo : str
+        Texto completo que se copia al portapapeles al seleccionar.
+        Si no hay columna 'cuerpo' en el archivo, queda igual a `titulo`.
+    """
+    titulo: str
+    cuerpo: str
+
+
 class TituloManager:
     """
     Gestiona la colección de títulos: carga desde archivo y búsqueda fuzzy.
@@ -25,15 +43,15 @@ class TituloManager:
     ---------
     ruta_archivo : Path
         Ruta al CSV o Excel con los títulos.
-    titulos : list[str]
-        Lista de títulos cargados.
+    titulos : list[Titulo]
+        Lista de entradas cargadas (título + cuerpo a copiar).
     """
 
     EXTENSIONES_VALIDAS = {".csv", ".xlsx", ".xls"}
 
     def __init__(self, ruta_archivo: str | Path):
         self.ruta_archivo = Path(ruta_archivo)
-        self.titulos: list[str] = []
+        self.titulos: list[Titulo] = []
         self.cargar()
 
     # ------------------------------------------------------------------
@@ -64,11 +82,16 @@ class TituloManager:
                     fieldnames = reader.fieldnames or []
                     if "titulo" not in fieldnames:
                         raise ValueError("El CSV debe tener una columna llamada 'titulo'.")
-                    self.titulos = [
-                        fila["titulo"].strip()
-                        for fila in reader
-                        if fila["titulo"].strip()
-                    ]
+
+                    tiene_cuerpo = "cuerpo" in fieldnames
+
+                    self.titulos = []
+                    for fila in reader:
+                        titulo = fila["titulo"].strip()
+                        if not titulo:
+                            continue
+                        cuerpo = fila["cuerpo"].strip() if tiene_cuerpo else titulo
+                        self.titulos.append(Titulo(titulo=titulo, cuerpo=cuerpo or titulo))
                 return  # Si llegó acá, anduvo bien
             except UnicodeDecodeError:
                 continue
@@ -87,12 +110,22 @@ class TituloManager:
         if "titulo" not in encabezados:
             raise ValueError("El Excel debe tener una columna llamada 'titulo'.")
 
-        col_idx = encabezados.index("titulo")
+        col_titulo = encabezados.index("titulo")
+        col_cuerpo = encabezados.index("cuerpo") if "cuerpo" in encabezados else None
+
         self.titulos = []
         for fila in ws.iter_rows(min_row=2, values_only=True):
-            valor = fila[col_idx]
-            if valor:
-                self.titulos.append(str(valor).strip())
+            valor_titulo = fila[col_titulo]
+            if not valor_titulo:
+                continue
+            titulo = str(valor_titulo).strip()
+
+            if col_cuerpo is not None and fila[col_cuerpo]:
+                cuerpo = str(fila[col_cuerpo]).strip()
+            else:
+                cuerpo = titulo
+
+            self.titulos.append(Titulo(titulo=titulo, cuerpo=cuerpo))
         wb.close()
 
     def recargar(self) -> None:
@@ -104,9 +137,9 @@ class TituloManager:
     # Búsqueda
     # ------------------------------------------------------------------
 
-    def buscar(self, query: str, max_resultados: int = 50) -> list[str]:
+    def buscar(self, query: str, max_resultados: int = 50) -> list[Titulo]:
         """
-        Búsqueda tolerante a tildes y mayúsculas.
+        Búsqueda tolerante a tildes y mayúsculas. Busca solo en el campo `titulo`.
         Prioriza: coincidencia al inicio > coincidencia en cualquier parte.
 
         Parámetros
@@ -118,8 +151,8 @@ class TituloManager:
 
         Retorna
         -------
-        list[str]
-            Títulos que coinciden, ordenados por relevancia.
+        list[Titulo]
+            Entradas que coinciden, ordenadas por relevancia.
         """
         if not query.strip():
             return self.titulos[:max_resultados]
@@ -130,17 +163,17 @@ class TituloManager:
         inicio = []
         medio = []
 
-        for titulo in self.titulos:
-            titulo_norm = normalizar(titulo)
+        for entrada in self.titulos:
+            titulo_norm = normalizar(entrada.titulo)
 
             # Todos los tokens deben estar presentes
             if not all(t in titulo_norm for t in tokens):
                 continue
 
             if titulo_norm.startswith(tokens[0]):
-                inicio.append(titulo)
+                inicio.append(entrada)
             else:
-                medio.append(titulo)
+                medio.append(entrada)
 
         return (inicio + medio)[:max_resultados]
 
