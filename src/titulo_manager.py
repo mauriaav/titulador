@@ -78,7 +78,12 @@ class TituloManager:
         for encoding in ("utf-8-sig", "utf-8", "windows-1252", "latin-1"):
             try:
                 with open(self.ruta_archivo, encoding=encoding, newline="") as f:
-                    reader = csv.DictReader(f)
+                    contenido = f.read()
+
+                delimitador = self._detectar_delimitador(contenido)
+
+                with open(self.ruta_archivo, encoding=encoding, newline="") as f:
+                    reader = csv.DictReader(f, delimiter=delimitador)
                     fieldnames = reader.fieldnames or []
                     if "titulo" not in fieldnames:
                         raise ValueError("El CSV debe tener una columna llamada 'titulo'.")
@@ -90,12 +95,24 @@ class TituloManager:
                         titulo = fila["titulo"].strip()
                         if not titulo:
                             continue
-                        cuerpo = fila["cuerpo"].strip() if tiene_cuerpo else titulo
+                        cuerpo_raw = fila.get("cuerpo") if tiene_cuerpo else None
+                        cuerpo = cuerpo_raw.strip() if cuerpo_raw else titulo
                         self.titulos.append(Titulo(titulo=titulo, cuerpo=cuerpo or titulo))
                 return  # Si llegó acá, anduvo bien
             except UnicodeDecodeError:
                 continue
         raise ValueError("No se pudo leer el archivo CSV: encoding desconocido.")
+
+    @staticmethod
+    def _detectar_delimitador(contenido: str) -> str:
+        """
+        Detecta si el CSV usa coma o punto y coma como separador.
+        Excel en español suele exportar con ';' por configuración regional.
+        """
+        primera_linea = contenido.splitlines()[0] if contenido else ""
+        if primera_linea.count(";") > primera_linea.count(","):
+            return ";"
+        return ","
 
     def _cargar_excel(self) -> None:
         try:

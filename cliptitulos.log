@@ -103,3 +103,120 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 479: invali
 
 
 🔴 ClipTítulos cerrado.
+✅ 4 títulos cargados desde 'titulos.csv'
+⌨️  Hotkey registrado: CTRL+SHIFT+SPACE
+🟢 ClipTítulos corriendo en el system tray. Presioná el atajo para buscar.
+
+📋 Copiado: Cobro indebido
+
+🔴 ClipTítulos cerrado.
+Traceback (most recent call last):
+  File "main.py", line 72, in <module>
+    main()
+    ~~~~^^
+  File "main.py", line 64, in main
+    app = ClipTitulosApp(
+        ruta_csv=ruta_csv,
+        hotkey="ctrl+shift+space",
+    )
+  File "src\app.py", line 44, in __init__
+    self._manager = TituloManager(self.ruta_csv)
+                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "src\titulo_manager.py", line 55, in __init__
+    self.cargar()
+    ~~~~~~~~~~~^^
+  File "src\titulo_manager.py", line 72, in cargar
+    self._cargar_csv()
+    ~~~~~~~~~~~~~~~~^^
+  File "src\titulo_manager.py", line 93, in _cargar_csv
+    cuerpo = fila["cuerpo"].strip() if tiene_cuerpo else titulo
+             ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strip'
+Traceback (most recent call last):
+  File "main.py", line 72, in <module>
+    main()
+    ~~~~^^
+  File "main.py", line 64, in main
+    app = ClipTitulosApp(
+        ruta_csv=ruta_csv,
+        hotkey="ctrl+shift+space",
+    )
+  File "src\app.py", line 44, in __init__
+    self._manager = TituloManager(self.ruta_csv)
+                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "src\titulo_manager.py", line 55, in __init__
+    self.cargar()
+    ~~~~~~~~~~~^^
+  File "src\titulo_manager.py", line 72, in cargar
+    self._cargar_csv()
+    ~~~~~~~~~~~~~~~~^^
+  File "src\titulo_manager.py", line 93, in _cargar_csv
+    cuerpo = fila["cuerpo"].strip() if tiene_cuerpo else titulo
+             ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strip'
+Traceback (most recent call last):
+  File "main.py", line 72, in <module>
+    main()
+    ~~~~^^
+  File "main.py", line 64, in main
+    app = ClipTitulosApp(
+        ruta_csv=ruta_csv,
+        hotkey="ctrl+shift+space",
+    )
+  File "src\app.py", line 44, in __init__
+    self._manager = TituloManager(self.ruta_csv)
+                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "src\titulo_manager.py", line 55, in __init__
+    self.cargar()
+    ~~~~~~~~~~~^^
+  File "src\titulo_manager.py", line 72, in cargar
+    self._cargar_csv()
+    ~~~~~~~~~~~~~~~~^^
+  File "src\titulo_manager.py", line 93, in _cargar_csv
+    cuerpo = fila["cuerpo"].strip() if tiene_cuerpo else titulo
+             ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strip'
+Traceback (most recent call last):
+  File "main.py", line 72, in <module>
+    main()
+    ~~~~^^
+  File "main.py", line 64, in main
+    app = ClipTitulosApp(
+        ruta_csv=ruta_csv,
+        hotkey="ctrl+shift+space",
+    )
+  File "src\app.py", line 44, in __init__
+    self._manager = TituloManager(self.ruta_csv)
+                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "src\titulo_manager.py", line 55, in __init__
+    self.cargar()
+    ~~~~~~~~~~~^^
+  File "src\titulo_manager.py", line 72, in cargar
+    self._cargar_csv()
+    ~~~~~~~~~~~~~~~~^^
+  File "src\titulo_manager.py", line 93, in _cargar_csv
+    cuerpo = fila["cuerpo"].strip() if tiene_cuerpo else titulo
+             ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strip'
+Traceback (most recent call last):
+  File "main.py", line 72, in <module>
+    main()
+    ~~~~^^
+  File "main.py", line 64, in main
+    app = ClipTitulosApp(
+        ruta_csv=ruta_csv,
+        hotkey="ctrl+shift+space",
+    )
+  File "src\app.py", line 44, in __init__
+    self._manager = TituloManager(self.ruta_csv)
+                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "src\titulo_manager.py", line 55, in __init__
+    self.cargar()
+    ~~~~~~~~~~~^^
+  File "src\titulo_manager.py", line 72, in cargar
+    self._cargar_csv()
+    ~~~~~~~~~~~~~~~~^^
+  File "src\titulo_manager.py", line 93, in _cargar_csv
+    cuerpo = fila["cuerpo"].strip() if tiene_cuerpo else titulo
+             ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strip'
